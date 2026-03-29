@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: sbsc-test-authorization-service
+
+sbsc:
+  security:
+    jwt-secret: oBamXXPBs/soQLxDgAQf0L9WeyNXJJEsS7wdrq5+btc=
+    jwt-expiration-ms: 3600000

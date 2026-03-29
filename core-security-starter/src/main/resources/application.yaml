@@ -1,0 +1,3 @@
+spring:
+  application:
+    name: sbsc-test-authorization-service
