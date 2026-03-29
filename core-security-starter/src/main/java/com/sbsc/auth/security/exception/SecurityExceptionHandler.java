@@ -6,9 +6,12 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SecurityExceptionHandler implements AuthenticationEntryPoint, AccessDeniedHandler {
 
+    private static final Logger log = LoggerFactory.getLogger(SecurityExceptionHandler.class);
     private final ObjectMapper objectMapper;
 
     public SecurityExceptionHandler(ObjectMapper objectMapper) {
@@ -21,7 +24,7 @@ public class SecurityExceptionHandler implements AuthenticationEntryPoint, Acces
                          org.springframework.security.core.AuthenticationException authException)
             throws IOException {
 
-        System.out.println(">>> AuthenticationEntryPoint HIT <<<");
+        log.debug(">>> AuthenticationEntryPoint HIT <<<");
 
         ApiErrorResponse error = new ApiErrorResponse(
                 401,

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sbsc.auth.security.exception.SecurityExceptionHandler;
 import com.sbsc.auth.security.filter.JwtAuthenticationFilter;
 import com.sbsc.auth.security.jwt.JwtService;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,21 +19,26 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.NullSecurityContextRepository;
 
+import static com.sbsc.auth.security.config.ApiPaths.*;
+
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
+    @ConditionalOnMissingBean(SecurityExceptionHandler.class)
     public SecurityExceptionHandler securityExceptionHandler(ObjectMapper objectMapper) {
         return new SecurityExceptionHandler(objectMapper);
     }
 
     @Bean
+    @ConditionalOnMissingBean(PasswordEncoder.class)
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
+    @ConditionalOnMissingBean(SecurityFilterChain.class)
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             JwtService jwtService,
@@ -61,7 +67,7 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/public/**").permitAll()
+                        .requestMatchers(PUBLIC).permitAll()
                         .anyRequest().authenticated()
                 )
 

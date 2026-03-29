@@ -2,14 +2,12 @@ package com.sbsc.auth.security.jwt;
 
 import com.sbsc.auth.security.properties.SecurityProperties;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import io.jsonwebtoken.security.Keys;
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
 
 public class JwtService {
@@ -52,13 +50,29 @@ public class JwtService {
     }
 
     public List<String> extractRoles(String token) {
-        return extractAllClaims(token).get("roles", List.class);
+        return (List<String>) extractAllClaims(token).get("roles", List.class);
     }
 
     public boolean isTokenValid(String token) {
         try {
+            if (isTokenExpired(token)) {
+                throw new ExpiredJwtException(null, null, "Token expired");
+            }
+            extractAllClaims(token); // will throw if invalid signature, etc.
+            return true;
+        } catch (ExpiredJwtException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    public boolean isTokenExpired(String token) {
+        try {
             Claims claims = extractAllClaims(token);
-            return claims.getExpiration().after(new Date());
+            return claims.getExpiration().before(new Date());
+        } catch (ExpiredJwtException ex) {
+            return true;
         } catch (Exception ex) {
             return false;
         }

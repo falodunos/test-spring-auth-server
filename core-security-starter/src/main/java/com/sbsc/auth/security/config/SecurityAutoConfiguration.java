@@ -3,6 +3,7 @@ package com.sbsc.auth.security.config;
 import com.sbsc.auth.security.jwt.JwtService;
 import com.sbsc.auth.security.properties.SecurityProperties;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Import;
 public class SecurityAutoConfiguration {
 
     @Bean
+    @ConditionalOnMissingBean(JwtService.class)
     public JwtService jwtService(SecurityProperties securityProperties) {
         return new JwtService(securityProperties);
     }
