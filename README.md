@@ -1,5 +1,9 @@
 # Spring Boot Authentication & Authorization System
 
+### Author: Olugbenga Solomon FALODUN
+### Date: March 29, 2026
+
+
 ## Overview
 
 This project demonstrates a **modular authentication and authorization system** built with Spring Boot.
